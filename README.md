@@ -22,6 +22,5 @@ Here is a toy example (also available at `examples/toy_example.py`)
 import numpy as np
 from package import function
 
-ssh test
 python code
 ```
