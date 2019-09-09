@@ -199,7 +199,34 @@ def Gauss_dim_out_bnd(n, d, dim, a, b):
 
 
 def Gauss(n, d, dim='norm', a=0., b=1., in_=True):
-    """Sample from Gaussian r.v. constrained by any function"""
+    """Sample from Gaussian r.v. constrained by any function
+
+    Parameters
+    ----------
+    n: int
+       Number of observations to sample
+
+    d: int
+       Dimension of the observations to sample
+
+    dim: str, default='norm'
+         Perform bias on norm or on dimension (to be specified by an int)
+
+    a: float, default=0.
+       Lower bound of the bias
+
+    b: float, default=1.
+       Upper bound of the bias
+
+    in_: bool, default=True
+         If True, sample Gaussian observations that satisfy norm (or specified)
+         dimension between a and b. Outside a and b otherwise.
+
+    Returns
+    -------
+    X: array of shape (n, d)
+       Biased Gaussian sample
+    """
 
     if dim == 'norm':
         if in_:
@@ -358,7 +385,34 @@ def SampleX_dim_in_set(X, n, dim, set_):
 
 
 def SampleX(X, n, dim='norm', a=0., b=1., in_=True):
-    """Sample from X constrained by any function"""
+    """Sample from X constrained by any function
+
+    Parameters
+    ----------
+    X: array of shape (n_obs, d)
+       Original dataset from which observations are sampled
+
+    n: int
+       Number of observations to sample
+
+    dim: str, default='norm'
+         Perform bias on norm or on dimension (to be specified by an int)
+
+    a: float, default=0.
+       Lower bound of the bias
+
+    b: float, default=1.
+       Upper bound of the bias
+
+    in_: bool, default=True
+         If True, sample observations that satisfy norm (or specified)
+         dimension between a and b. Outside a and b otherwise
+
+    Returns
+    -------
+    X_bias: array of shape (n, d)
+            Set of observations sampled from X with specified bias
+    """
 
     X2 = X.copy()
     np.random.shuffle(X2)

@@ -1,6 +1,6 @@
 import numpy as np
 from sklearn.datasets import load_boston
-from db_learn import (compute_weights, mk_Momega, one_sample, SampleX,
+from db_learn import (compute_weights, mk_Momega, concat, SampleX,
                       dim_in_bnd_vec)
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
@@ -31,7 +31,7 @@ lambdas = n_s / n_s.sum()
 Z_chp = SampleX(Z_tr, n_s[0], dim=-1, a=a_s[0], b=b_s[0])
 Z_exp = SampleX(Z_tr, n_s[1], dim=-1, a=a_s[1], b=b_s[1])
 Z_list = [Z_chp, Z_exp]
-Z_concat = one_sample(Z_list)
+Z_concat = concat(Z_list)
 
 
 # Compute debiasing weights

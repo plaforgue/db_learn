@@ -206,7 +206,21 @@ def weights_from_Omegas(Omegas, M_omega, lambdas):
 
 
 def compute_weights(M_omega, lambdas):
-    """Compute individual weights directly from M_omega"""
+    """Compute individual weights directly from M_omega
+
+    Parameters
+    ----------
+    M_omega: array of shape (K, n_max, K)
+             M_omega[i, j, k] = omega_k(X_ij), with nan values wherever X_ij
+             is not defined
+
+    lambdas: array of len K
+             Proportions of the different samples
+
+    Returns
+    -------
+    weights: array of len n (total number of examples)
+    """
 
     Omegas = compute_Omegas(M_omega, lambdas)
     weights = weights_from_Omegas(Omegas, M_omega, lambdas)
@@ -225,7 +239,22 @@ def compute_weights(M_omega, lambdas):
 
 
 def mk_Momega(X_list, meta_omega):
-    """Create M_omega array such that M_omega[i, j, k] = omega_k(X_ij)"""
+    """Create M_omega array such that M_omega[i, j, k] = omega_k(X_ij)
+
+    Parameters
+    ----------
+    X_list: list of len K
+            List of biased samples
+
+    meta_omega: function
+                Meta function such that meta_omega(x, k) = omega_k(x)
+
+    Returns
+    -------
+    M_omega: array of shape (K, n_max, K)
+             M_omega[i, j, k] = omega_k(X_ij), with nan values wherever X_ij
+             is not defined
+    """
 
     K = len(X_list)
     n_s = [X.shape[0] for X in X_list]
@@ -237,8 +266,19 @@ def mk_Momega(X_list, meta_omega):
     return M_omega
 
 
-def one_sample(X_list):
-    """Concatenate all samples"""
+def concat(X_list):
+    """Concatenate all samples
+
+    Parameters
+    ----------
+    X_list: list of len K
+            List of biased samples
+
+    Returns
+    -------
+    X: array of shape (n, d)
+       Training sample concatenated
+    """
 
     K = len(X_list)
     X = X_list[0].copy()
