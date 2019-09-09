@@ -1,11 +1,13 @@
 import numpy as np
 from sklearn.datasets import load_boston
-from db_weights import compute_weights, mk_Momega, one_sample
-from db_funcs import SampleX, dim_in_bnd_vec
+from db_learn import (compute_weights, mk_Momega, one_sample, SampleX,
+                      dim_in_bnd_vec)
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
 from sklearn.svm import SVR
 from sklearn.ensemble import RandomForestRegressor
+
+np.random.seed(0)
 
 
 # Datasets
@@ -62,12 +64,12 @@ reg_b.fit(Z_concat[:, :-1], Z_concat[:, -1], sample_weight=weights)
 err_b = np.mean((reg_b.predict(Z_te[:, :-1]) - Z_te[:, -1]) ** 2)
 res[3] = err_b
 
-reg = RandomForestRegressor(n_estimators=10)
+reg = RandomForestRegressor(n_estimators=20)
 reg.fit(Z_concat[:, :-1], Z_concat[:, -1])
 err = np.mean((reg.predict(Z_te[:, :-1]) - Z_te[:, -1]) ** 2)
 res[4] = err
 
-reg_b = RandomForestRegressor(n_estimators=10)
+reg_b = RandomForestRegressor(n_estimators=20)
 reg_b.fit(Z_concat[:, :-1], Z_concat[:, -1], sample_weight=weights)
 err_b = np.mean((reg_b.predict(Z_te[:, :-1]) - Z_te[:, -1]) ** 2)
 res[5] = err_b
