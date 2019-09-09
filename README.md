@@ -12,7 +12,7 @@ To install the package, simply clone it, and then do:
 
 To check that everything worked, the command
 
-  `$ python -c 'import package'`
+  `$ python -c 'import db_learn'`
 
 should not return any error.
 

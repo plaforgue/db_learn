@@ -6,6 +6,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
 from sklearn.svm import SVR
 from sklearn.ensemble import RandomForestRegressor
+import matplotlib.pyplot as plt
 
 np.random.seed(0)
 
@@ -26,6 +27,7 @@ Z_tr, Z_te = train_test_split(Z, test_size=100)
 n_s = np.array([200, 100])
 lambdas = n_s / n_s.sum()
 
+# Sample biased datasets
 Z_chp = SampleX(Z_tr, n_s[0], dim=-1, a=a_s[0], b=b_s[0])
 Z_exp = SampleX(Z_tr, n_s[1], dim=-1, a=a_s[1], b=b_s[1])
 Z_list = [Z_chp, Z_exp]
@@ -41,7 +43,7 @@ M_omega = mk_Momega(Z_list, meta_omega)
 weights = compute_weights(M_omega, lambdas)
 
 
-# Train models w/o debiasing
+# Train models w/o debiasing weights for LR, SVR, RF
 res = np.zeros(6)
 
 reg = LinearRegression()
@@ -74,4 +76,12 @@ reg_b.fit(Z_concat[:, :-1], Z_concat[:, -1], sample_weight=weights)
 err_b = np.mean((reg_b.predict(Z_te[:, :-1]) - Z_te[:, -1]) ** 2)
 res[5] = err_b
 
-print(res)
+
+# Plot performance results
+plt.figure()
+plt.bar(np.arange(3) - 0.15, res[::2], width=0.3, label='standard')
+plt.bar(np.arange(3) + 0.15, res[1::2], width=0.3, label='debiased')
+plt.xticks(np.arange(3), ['LR', 'SVR', 'RF'])
+plt.ylabel('MSE')
+plt.legend()
+plt.show()

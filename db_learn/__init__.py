@@ -21,7 +21,7 @@
 
 __version__ = '0.1.dev0'
 
-from .db_weights import (compute_weights, compute_Omegas, compute_Ws, mk_Momega,
-                         one_sample)  # noqa
+from .db_weights import (compute_weights, compute_Omegas, compute_Ws,
+                         mk_Momega, one_sample)  # noqa
 from .db_funcs import (norm_in_bnd_vec, norm_out_bnd_vec, dim_in_bnd_vec,
                        dim_out_bnd_vec, dim_in_set_vec, Gauss, SampleX)  # noqa

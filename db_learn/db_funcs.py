@@ -1,3 +1,7 @@
+# Authors: Pierre Laforgue <pierre.laforgue@telecom-paristech.fr>
+#
+# License: MIT
+
 import numpy as np
 from numba import njit
 
