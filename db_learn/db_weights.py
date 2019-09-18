@@ -123,25 +123,21 @@ def compute_Ws_lbfgs(M_omega, lambdas):
     return Ws
 
 
-def compute_Ws(M_omega, lambdas):
-    """Compute Ws (use successive techniques to be sure to converge)"""
+def compute_Ws(M_omega, lambdas, method='lbfgs', n_epoch=1000, lr=1.):
+    """Compute Ws using specified method"""
 
-    Ws = compute_Ws_RM(M_omega, lambdas)
+    if method == 'lbfgs':
+        Ws = compute_Ws_lbfgs(M_omega, lambdas)
+    elif method == 'root':
+        Ws = compute_Ws_root(M_omega, lambdas)
+    elif method == 'RM':
+        Ws = compute_Ws_RM(M_omega, lambdas, n_epoch=n_epoch, lr=lr)
+
     u = np.log(lambdas / Ws)
     n = np.linalg.norm(K_(u, M_omega, lambdas))
 
     if n > 1e-6:
-        Ws = compute_Ws_root(M_omega, lambdas)
-        u = np.log(lambdas / Ws)
-        n = np.linalg.norm(K_(u, M_omega, lambdas))
-
-        if n > 1e-6:
-            Ws = compute_Ws_lbfgs(M_omega, lambdas)
-            u = np.log(lambdas / Ws)
-            n = np.linalg.norm(K_(u, M_omega, lambdas))
-
-            if n > 1e-6:
-                print('Convergence Warning, K_norm: %2.e' % n)
+        print('Convergence Warning, K_norm = %2.e' % n)
 
     return Ws
 
@@ -175,10 +171,10 @@ def Omegas_from_Ws(Ws, M_omega, lambdas):
     return Omegas
 
 
-def compute_Omegas(M_omega, lambdas):
+def compute_Omegas(M_omega, lambdas, method='lbfgs', n_epoch=1000, lr=1.):
     """Compute Omegas directly from M_omega"""
 
-    Ws = compute_Ws(M_omega, lambdas)
+    Ws = compute_Ws(M_omega, lambdas, method=method, n_epoch=n_epoch, lr=lr)
     Omegas = Omegas_from_Ws(Ws, M_omega, lambdas)
     return Omegas
 
@@ -205,7 +201,7 @@ def weights_from_Omegas(Omegas, M_omega, lambdas):
     return res
 
 
-def compute_weights(M_omega, lambdas):
+def compute_weights(M_omega, lambdas, method='lbfgs', n_epoch=1000, lr=1.):
     """Compute individual weights directly from M_omega
 
     Parameters
@@ -217,12 +213,22 @@ def compute_weights(M_omega, lambdas):
     lambdas: array of len K
              Proportions of the different samples
 
+    method: str, default='lbfgs'
+            Method to use in "compute_Ws"
+
+    n_epoch: int, default=1000
+             Number of Robbins-Monro iterations if chosen method
+
+    lr: float, default=1.
+        Leraning rate of Robbins-Monro iterations if chosen method
+
     Returns
     -------
     weights: array of len n (total number of examples)
     """
 
-    Omegas = compute_Omegas(M_omega, lambdas)
+    Omegas = compute_Omegas(M_omega, lambdas,
+                            method=method, n_epoch=n_epoch, lr=lr)
     weights = weights_from_Omegas(Omegas, M_omega, lambdas)
     return weights
 
